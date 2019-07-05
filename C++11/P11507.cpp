@@ -3,13 +3,10 @@
 
 using namespace std;
 
-//enum Position {+x, -x, +y, -y, +z, -z};
-
 int main() {
-	int n; //aux_res, aux_inp;
+	int n;
 	string input;
 	string res;
-	//map<string, Position> convers;
 	
 	while(cin >> n) {
 		res = "+x";
