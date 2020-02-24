@@ -1,7 +1,6 @@
 #include <vector>
 #include <cstdio>
 #include <iostream>
-#include <sstream>
 #include <set>
 #include <queue>
 #include <utility>
@@ -60,42 +59,6 @@ public:
         return false;
     }
 
-    void eliminarArista(int origen, int dest) {
-        
-        for (unsigned int i = 0; i < adyacentes[origen].size(); i++) {
-            Adyacente ady = adyacentes[origen][i];
-            if (ady.dest == dest) {
-                adyacentes[origen].erase(adyacentes[origen].begin() + i);
-                gradosEntrada[origen]--;
-                numAristas--;
-            }
-        }
-
-        for (unsigned int i = 0; i < adyacentes[dest].size(); i++) {
-            Adyacente ady = adyacentes[dest][i];
-            if (ady.dest == origen) {
-                adyacentes[dest].erase(adyacentes[dest].begin() + i);
-                gradosEntrada[dest]--;
-                numAristas--;
-            }
-        }
-    }
-
-    std::string toString() {
-        std::stringstream res;
-        for(int i = 0; i < numNodos; i++) {
-            res << "Vertice: " << i;
-            std::vector<Adyacente> l = adyacentes[i];
-            if(l.empty())
-                res << " sin adyacentes ";
-            else
-                res << " con adyacentes: ";
-            for (auto ady : l)
-                res << ady.dest << "(" << ady.coste << ") ";
-            res << "\n";
-        }
-        return res.str();
-    }
 };
 
 int getBestRoute(int origen, int dest, Grafo graph) {
@@ -109,23 +72,11 @@ int getBestRoute(int origen, int dest, Grafo graph) {
 
         ii actual = caminos.top(); caminos.pop();
 
-        /*
-        std::cout << "PREV: ";
-        for(auto x : prev) {
-            std::cout << x << " ";
-        }
-        std::cout << "\n";
-        */
-       
         if (prev.find(actual.second) == prev.end()) {
 
             for (auto ady : graph.adyacentes[actual.second]) {
 
-                //std::cout << actual.second << "(" << capacidad[actual.second] << ") " << ady.dest << "(" << capacidad[ady.dest] << ") " << ady.coste << "\n";
-
                 if (prev.find(ady.dest) == prev.end()) {
-                    
-                    //std::cout << capacidad[ady.dest] << " || " << capacidad[actual.second] << " > " << capacidad[ady.dest] << "\n";
 
                     if(actual.second == origen) {
 
@@ -141,7 +92,6 @@ int getBestRoute(int origen, int dest, Grafo graph) {
 
                     } else if (capacidad[actual.second] > capacidad[ady.dest]) {
 
-                        //std::cout << capacidad[actual.second] << " < " << ady.coste << " || " << ady.coste << " > " << capacidad[ady.dest] << "\n";
                         if(capacidad[actual.second] < ady.coste) {
                             capacidad[ady.dest] = capacidad[actual.second];
                         } else if (ady.coste > capacidad[ady.dest]) {
@@ -160,13 +110,6 @@ int getBestRoute(int origen, int dest, Grafo graph) {
         }
 
         prev.insert(actual.second);
-
-        /*
-        for(auto i : capacidad) {
-            std::cout << i << " ";
-        }
-        std::cout << "\n";
-        */
 
     }
 
@@ -194,7 +137,6 @@ int main() {
         int S, D, T;
         std::cin >> S >> D >> T;
         int res = getBestRoute(S, D, problem);
-        //std::cout << "Tenemos " << T << " personas y máximo " << res << " personas por viaje.\n";
         std::cout << "Scenario #" << cont << "\n";
         std::cout << "Minimum Number of Trips = " << ceil((double)T/res) << "\n\n";
 
